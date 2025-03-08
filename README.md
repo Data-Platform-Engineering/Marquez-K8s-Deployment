@@ -1,7 +1,7 @@
 # Marquez-K8s-Deployment
 # Marquez [Helm Chart](https://helm.sh)
 
-Helm Chart for [Marquez](https://github.com/MarquezProject/marquez).
+Helm Chart for [Marquez](https://marquezproject.ai/).
 
 ## TL;DR;
 Run all commands within the "chart" folder, with default configurations.
@@ -25,14 +25,6 @@ helm install marquez . --dependency-update --set postgresql.enabled=true
 
 > **Note:** For a list of parameters that can be overridden during installation, see the [configuration](#configuration) section.
 
-## Testing the Chart
-
-To confirm connectivity and availability of the installed components (API and optional website). Note
-that you may need to wait a minute or so for services to fully deploy.
-
-```bash
-helm test marquez
-```
 
 ## Uninstalling the Chart
 
@@ -132,42 +124,6 @@ The quickest way to install Marquez via Kubernetes is to create a local Postgres
 helm install marquez . --dependency-update --set postgresql.enabled=true
 ```
 
-### Docker Postgres
-
-A Postgres database is configured within the Marquez project that use Docker to launch, which provides the added
-benefit of test data seeding. You can run the following command to create this instance of Postgres via Docker.
-Contents of the ```./../docker-compose-postgres..yml``` file can be customized
-to better represent your desired setup.
-
-```bash
-docker-compose -f ./../docker-compose.db.yml -p marquez-postgres up
-```
-
-Once the Postgres instance has been created, run the following command to locate the IP
-address of the database. Note you will need to un-escape the markdown.
-
-```bash
-marquez_db_ip=$(docker inspect marquez-postgres_db_1 -f '{{range.NetworkSettings.Networks}}{{.Gateway}}{{end}}')
-```
-
-Deploy via Helm and update database values as needed, either via
-the `values.yaml` file or within the Helm CLI command. Again, remove the
-pesky markdown escape character before running this command.
-
-```bash
-helm install marquez . --dependency-update --set marquez.db.host=$marquez_db_ip
-```
-
-### Validation
-
-Once the Kubernetes pods and services have been installed (usually within 5-10 seconds), connectivity
-tests can be executed by running the following Helm command. You should see a status message
-of `Succeeded` for each test if the HTTP endpoints were reachable.
-
-```bash
-helm test marquez
-```
-
 If you haven't configured ingress within the Helm chart values, then you can use the
 following port forwarding rules to support local development.
 
@@ -184,13 +140,6 @@ links below.
 * http://localhost:5000/api/v1/namespaces
 * http://localhost:3000
 
-### Troubleshooting
-If things aren't working as expected, you can find out more by viewing the `kubectl` logs.
-First, get the name of the pod that was installed by the Helm chart.
-
-```bash
-kubectl get pods
-```
 
 Plug this pod name into the following command, and it will display logs related
 to the database migrations. This makes it simple to see errors dealing with
@@ -199,11 +148,3 @@ networking issues, credentials, etc.
 ```bash
 kubectl logs -p <podName>
 ```
-
-## Contributing
-
-See [CONTRIBUTING.md](https://github.com/MarquezProject/marquez-chart/blob/master/CONTRIBUTING.md) for more details about how to contribute.
-
-----
-SPDX-License-Identifier: Apache-2.0
-Copyright 2018-2023 contributors to the Marquez project.
