@@ -140,3 +140,14 @@ Postgres helm chart expects the password to exist within a specific key.
     {{- printf "%s" "marquez-db-password" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Postgres helm chart expects the host to exist within a specific key.
+*/}}
+{{- define "marquez.database.existingsecret.hostkey" -}}
+{{- if .Values.postgresql.enabled -}}
+    {{- printf "%s" "host" -}}
+{{- else -}}
+    {{- printf "%s" "marquez-db-host" -}}
+{{- end -}}
+{{- end -}}

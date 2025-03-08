@@ -25,15 +25,15 @@ marquez:
   ## Name of the existing secret containing credentials for the Marquez installation.
   ## When this is specified, it will take precedence over the values configured in the 'db' section.
   ##
-  # existingSecretName: marquez-secrets
+  existingSecretName: marquez-secret
   ## Postgres database settings where Marquez data will persist
   ##
   db:
-    host: localhost
+    host: ""
     port: 5432
     name: marquez
-    user: buendia
-    password: macondo
+    user: marquez
+    password: ""
   ## Indicates if Flyway database migration will execute upon deployment
   ##
   migrateOnStartup: true
@@ -52,12 +52,12 @@ marquez:
   resources:
     # Typically best to not specify these settings, unless you've got a specific
     # reason to customize.
-    limits: {}
-    #    cpu: 200m
-    #    memory: 1Gi
-    requests: {}
-    #    memory: 256Mi
-    #    cpu: 250m
+    limits:
+      cpu: 200m
+      memory: 800Mi
+    requests:
+      memory: 256Mi
+      cpu: 250m
   podAnnotations: {}
   ## - name:
   ##   value:
@@ -91,12 +91,12 @@ web:
   resources:
     # Typically best to not specify these settings, unless you've got a specific
     # reason to customize.
-    limits: {}
-    #    cpu: 200m
-    #    memory: 1Gi
-    requests: {}
-    #    memory: 256Mi
-    #    cpu: 250m
+    limits:
+      cpu: 200m
+      memory: 800Mi
+    requests:
+      memory: 256Mi
+      cpu: 250m
 
 ## PostgreSQL chart configuration
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
@@ -139,6 +139,7 @@ postgresql:
     ##
     existingSecret: ""
 
+
 ## Additional labels to all the deployed resources; note that
 ## the following standard labels will automatically be applied.
 ##   app.kubernetes.io/name, helm.sh/chart,
@@ -175,7 +176,7 @@ nodeSelector: {}
 ## For minikube, set this to NodePort, elsewhere use LoadBalancer
 ##
 service:
-  type: ClusterIP
+  type: NodePort
   port: 80
   ## Service annotations done as key:value pairs
   ##

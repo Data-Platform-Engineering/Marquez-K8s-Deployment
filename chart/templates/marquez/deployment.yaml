@@ -80,7 +80,10 @@ spec:
             - name: MARQUEZ_CONFIG
               value: /usr/src/app/config.yml
             - name: POSTGRES_HOST
-              value: {{ include "marquez.database.host" . | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "marquez.postgresql.secretName" . }}
+                  key: {{ include "marquez.database.existingsecret.hostkey" . }}
             - name: POSTGRES_PORT
               value: {{ include "marquez.database.port" . | quote }}
             - name: POSTGRES_DB
